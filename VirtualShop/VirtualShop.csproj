@@ -11,12 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Adapters\Output\" />
-    <Folder Include="Core\Aplication\Interfaces\" />
-    <Folder Include="Core\Aplication\OutputPorts\" />
-    <Folder Include="Core\Aplication\Usecases\" />
     <Folder Include="Core\Services\" />
-    <Folder Include="Infrastructure\" />
   </ItemGroup>
 
 </Project>
