@@ -6,6 +6,8 @@ namespace VirtualShop.Core.Aplication.InputPorts;
 interface IUserPort
 {
     public Task<ActionResult<List<User>>> GetAllUsers();
+    
+    public Task<ActionResult<User>> GetUserById(int id);
 
     public Task<ActionResult<User>> CreateUser(UserInsertDTO userInsert);
 

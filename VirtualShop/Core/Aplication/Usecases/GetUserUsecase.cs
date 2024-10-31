@@ -25,10 +25,16 @@ namespace VirtualShop.Core.Aplication.Usecases
             }
         }
 
-        public  async Task<User> GetUser(int id) 
-        { 
-            throw new NotImplementedException();
-        
+        public  async Task<User> GetUserById(int id)
+        {
+                User? user= await _userRepository.GetUserById(id);
+
+                if (user == null) 
+                {
+                throw new ArgumentException("The requested user does not exist.");
+                
+                }
+                return user;
         }
 
     }
