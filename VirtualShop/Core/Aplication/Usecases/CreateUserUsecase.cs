@@ -1,15 +1,15 @@
-﻿using VirtualShop.Adapters.Output;
-using VirtualShop.Core.Aplication.DTOs;
+﻿using VirtualShop.Core.Aplication.DTOs;
 using VirtualShop.Core.Aplication.Interfaces;
+using VirtualShop.Core.Aplication.OutputPorts;
 using VirtualShop.Core.Domain.Entities;
 using VirtualShop.Infrastructure.Database;
 namespace VirtualShop.Core.Aplication.Usecases
 {
     public class CreateUserUsecase: ICreateUserUsecase
     {
-        private UserRepository _userRepository;
+        private IUserRepository _userRepository;
 
-       public CreateUserUsecase(UserRepository userRepository)
+       public CreateUserUsecase(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

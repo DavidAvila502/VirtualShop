@@ -1,14 +1,15 @@
 ﻿using VirtualShop.Adapters.Output;
 using VirtualShop.Core.Aplication.Interfaces;
+using VirtualShop.Core.Aplication.OutputPorts;
 using VirtualShop.Core.Domain.Entities;
 
 namespace VirtualShop.Core.Aplication.Usecases
 {
     public class DeleteUserUsecase:IDeleteUserUsecase
     {
-        private UserRepository _userRepository;
+        private IUserRepository _userRepository;
 
-        public DeleteUserUsecase(UserRepository useRepository)
+        public DeleteUserUsecase(IUserRepository useRepository)
         {
             _userRepository = useRepository;
         }

@@ -4,7 +4,7 @@ using VirtualShop.Core.Domain.Entities;
 
 namespace VirtualShop.Core.Aplication.OutputPorts
 {
-    interface IUserRepository{
+   public interface IUserRepository{
         public Task<List<User>> GetAllUsers();
 
         public Task<User?> GetUserById(int id);

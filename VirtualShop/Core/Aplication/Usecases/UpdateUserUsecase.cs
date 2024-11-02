@@ -1,6 +1,6 @@
-﻿using VirtualShop.Adapters.Output;
-using VirtualShop.Core.Aplication.DTOs;
+﻿using VirtualShop.Core.Aplication.DTOs;
 using VirtualShop.Core.Aplication.Interfaces;
+using VirtualShop.Core.Aplication.OutputPorts;
 using VirtualShop.Core.Domain.Entities;
 
 namespace VirtualShop.Core.Aplication.Usecases
@@ -8,9 +8,9 @@ namespace VirtualShop.Core.Aplication.Usecases
     public class UpdateUserUsecase:IUpdateUserUsecase
     {
 
-        private UserRepository _userRepository;
+        private IUserRepository _userRepository;
         
-        public UpdateUserUsecase(UserRepository userRepository)
+        public UpdateUserUsecase(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

@@ -1,14 +1,14 @@
-﻿using VirtualShop.Adapters.Output;
-using VirtualShop.Core.Aplication.Interfaces;
+﻿using VirtualShop.Core.Aplication.Interfaces;
+using VirtualShop.Core.Aplication.OutputPorts;
 using VirtualShop.Core.Domain.Entities;
 
 namespace VirtualShop.Core.Aplication.Usecases
 {
     public class GetUserUsecase:IGetUserUsecase
     {
-       private UserRepository _userRepository;
+       private IUserRepository _userRepository;
 
-       public GetUserUsecase(UserRepository userRepository)
+       public GetUserUsecase(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

@@ -2,6 +2,8 @@
 using VirtualShop.Adapters.Output;
 using VirtualShop.Core.Aplication.DTOs;
 using VirtualShop.Core.Aplication.InputPorts;
+using VirtualShop.Core.Aplication.Interfaces;
+using VirtualShop.Core.Aplication.OutputPorts;
 using VirtualShop.Core.Aplication.Usecases;
 using VirtualShop.Core.Domain.Entities;
 
@@ -11,19 +13,25 @@ namespace VirtualShop.Adapters.Input.Controllers
     [ApiController]
     public class UserController : ControllerBase, IUserPort
     {
-        private UserRepository _userRepository;
-        private CreateUserUsecase _createUserUsecase;
-        private GetUserUsecase _getUserUsecase;
-        private UpdateUserUsecase _updateUserUsecase;
-        private DeleteUserUsecase _deleteUserUsecase;
+        private IUserRepository _userRepository;
+        private IProductRepository _productRepository;
+
+        private ICreateUserUsecase _createUserUsecase;
+        private IGetUserUsecase _getUserUsecase;
+        private IUpdateUserUsecase _updateUserUsecase;
+        private IDeleteUserUsecase _deleteUserUsecase;
+        private IBuyProductUsecase _buyProductUsecase;
 
         public UserController()
         {
             _userRepository = new UserRepository();
+            _productRepository = new ProductRepository();
+
             _createUserUsecase = new CreateUserUsecase(_userRepository);
             _getUserUsecase = new GetUserUsecase(_userRepository);
             _updateUserUsecase = new UpdateUserUsecase(_userRepository);
             _deleteUserUsecase = new DeleteUserUsecase(_userRepository);
+            _buyProductUsecase = new BuyProductUsecase(_userRepository, _productRepository);
         }
 
         [HttpGet]
@@ -126,7 +134,24 @@ namespace VirtualShop.Adapters.Input.Controllers
         [HttpPost("{userId}/buy/{productId}")]
         public async Task<IActionResult> BuyProduct(int userId , int productId)
         {
-            return StatusCode(500, new { message = "Unimplement endpoint." });
+            try
+            {
+                await _buyProductUsecase.BuyProduct(userId, productId);
+                return Ok("Purchase done.");
+
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);  
+            }
+            catch(ApplicationException ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
     }

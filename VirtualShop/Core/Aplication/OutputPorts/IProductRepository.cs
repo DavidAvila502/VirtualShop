@@ -3,7 +3,7 @@ using VirtualShop.Core.Domain.Entities;
 
 namespace VirtualShop.Core.Aplication.OutputPorts
 {
-    interface IProductRepository
+   public  interface IProductRepository
     {
         public Task<List<Product>> GetAllProducts();
 

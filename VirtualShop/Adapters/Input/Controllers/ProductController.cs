@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using VirtualShop.Adapters.Output;
 using VirtualShop.Core.Aplication.DTOs;
 using VirtualShop.Core.Aplication.InputPorts;
+using VirtualShop.Core.Aplication.Interfaces;
+using VirtualShop.Core.Aplication.OutputPorts;
+using VirtualShop.Core.Aplication.Usecases;
 using VirtualShop.Core.Domain.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,18 +15,54 @@ namespace VirtualShop.Adapters.Input.Controllers
     [ApiController]
     public class ProductController : ControllerBase,IProductPort
     {
+        private IProductRepository _productRepository;
+        private IGetProductUsecase _getProductUsecase;
+        private ICreateProductUsecase _createProductUsecase;
+        private IUpdateProductUsecase _updateProductUsecase;
+        private IDeleteProductUsecase _deleteProductUsecase;
+
+        public ProductController()
+        {
+            _productRepository = new ProductRepository();
+            _getProductUsecase = new GetProductUsecase(_productRepository);
+            _createProductUsecase = new CreateProductUsecase(_productRepository);
+            _updateProductUsecase = new UpdateProductUsecase(_productRepository);
+            _deleteProductUsecase = new DeleteProductUsecase(_productRepository);
+        }
+
         // GET: api/<ProductController>
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetAllProducts()
         {
-            return StatusCode(500, new {message = "Unimplemented endpoing."});
+            try
+            {
+                List<Product> products = await _getProductUsecase.GetAllProducts();
+
+                return products;
+            }
+            catch (ApplicationException ex) 
+            {
+               return StatusCode(500, ex.Message);  
+            }
         }
 
         // GET api/<ProductController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProductById(int id)
         {
-            return StatusCode(500, new { message = "Unimplemented endpoing." });
+            try
+            {
+                Product product = await _getProductUsecase.GetProductById(id);
+                return product;
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch(ApplicationException ex)
+            {
+                return StatusCode(500, new {message = ex.Message});
+            }
 
         }
 
@@ -30,7 +70,17 @@ namespace VirtualShop.Adapters.Input.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct([FromBody] ProductInsertDTO productInsert)
         {
-            return StatusCode(500, new { message = "Unimplemented endpoing." });
+            try
+            {
+
+                Product product = await _createProductUsecase.CreateProduct(productInsert);
+                return CreatedAtAction(nameof(GetProductById), new {Id = product.Id}, product);
+            }
+
+            catch (ApplicationException ex) {
+
+                return StatusCode(500, new {message = ex.Message });
+            }
 
         }
 
@@ -38,7 +88,22 @@ namespace VirtualShop.Adapters.Input.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductModDTO productMod)
         {
-            return StatusCode(500, new { message = "Unimplemented endpoing." });
+            try
+            {
+                await _updateProductUsecase.UpdateProduct(id, productMod);
+
+                return Ok("The product was updated successfully.");
+            }
+            catch (KeyNotFoundException ex) {
+
+                return NotFound(ex.Message);
+            }
+
+            catch(ApplicationException ex)
+            {
+                return StatusCode(500, new {message = ex.Message});
+            }
+ 
 
         }
 
@@ -46,8 +111,20 @@ namespace VirtualShop.Adapters.Input.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            return StatusCode(500, new { message = "Unimplemented endpoing." });
+            try
+            {
+                await _deleteProductUsecase.DeleteProduct(id);
 
+                return Ok("The product was deleted successfully.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ApplicationException ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
     }
 }
