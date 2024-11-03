@@ -19,6 +19,18 @@ namespace VirtualShop.Adapters.Output
 
         }
 
+        public async Task<User?> GetUserById(int id)
+        {
+            int seleepValue = rdn.Next(5000);
+
+            Task.Delay(seleepValue).Wait();
+
+            User user = AppDBContext.CurrentData.Users.FirstOrDefault(x => x.Id == id);
+
+            return user;
+
+        }
+
         public  async Task<User> CreateUser(User user)
         {
             int seleepValue = rdn.Next(5000);

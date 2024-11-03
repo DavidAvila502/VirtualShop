@@ -5,6 +5,6 @@ namespace VirtualShop.Core.Aplication.Interfaces
     interface IGetUserUsecase
     {
         public Task<List<User>> GetAllUsers();
-        public Task<User> GetUser(int id);
+        public Task<User> GetUserById(int id);
     }
 }

@@ -4,7 +4,6 @@ namespace VirtualShop.Infrastructure.Database
 {
     public class AppDBContext
     {
-        
         public List<User> Users { get; set; }
         public List<Product> Products { get; set; }
 

@@ -1,14 +1,14 @@
-﻿using VirtualShop.Adapters.Output;
-using VirtualShop.Core.Aplication.Interfaces;
+﻿using VirtualShop.Core.Aplication.Interfaces;
+using VirtualShop.Core.Aplication.OutputPorts;
 using VirtualShop.Core.Domain.Entities;
 
 namespace VirtualShop.Core.Aplication.Usecases
 {
     public class GetUserUsecase:IGetUserUsecase
     {
-       private UserRepository _userRepository;
+       private IUserRepository _userRepository;
 
-       public GetUserUsecase(UserRepository userRepository)
+       public GetUserUsecase(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
@@ -25,10 +25,16 @@ namespace VirtualShop.Core.Aplication.Usecases
             }
         }
 
-        public  async Task<User> GetUser(int id) 
-        { 
-            throw new NotImplementedException();
-        
+        public  async Task<User> GetUserById(int id)
+        {
+                User? user= await _userRepository.GetUserById(id);
+
+                if (user == null) 
+                {
+                throw new ArgumentException("The requested user does not exist.");
+                
+                }
+                return user;
         }
 
     }
